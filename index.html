@@ -1,0 +1,828 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>花式信件系统</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=ZCOOL+QingKe+HuangYou&family=Dancing+Script:wght@400;500;600;700&family=Noto+Serif+SC:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Ma Shan Zheng', cursive;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* 首页样式 */
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            width: 100%;
+            max-width: 500px;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: bold;
+            font-size: 1.1em;
+        }
+
+        textarea, input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 16px;
+            font-family: 'ZCOOL QingKe HuangYou', cursive;
+            transition: all 0.3s ease;
+            background: rgba(255,255,255,0.8);
+        }
+
+        textarea {
+            height: 200px;
+            resize: vertical;
+            font-size: 18px;
+            line-height: 1.6;
+        }
+
+        textarea:focus, input:focus, select:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            outline: none;
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 18px;
+            font-size: 1.2em;
+            border-radius: 10px;
+            cursor: pointer;
+            width: 100%;
+            font-family: 'Ma Shan Zheng', cursive;
+            transition: all 0.3s ease;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .note {
+            font-size: 0.9em;
+            color: #888;
+            margin-top: 5px;
+            font-style: italic;
+        }
+
+        .decoration {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 2em;
+        }
+
+        .upload-info {
+            background: #e8f4fd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .network-info {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+            border-left: 4px solid #ffc107;
+            font-size: 0.9em;
+        }
+
+        /* 成功页面样式 */
+        .success-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            max-width: 700px;
+            width: 100%;
+        }
+
+        .success-icon {
+            font-size: 80px;
+            margin-bottom: 20px;
+        }
+
+        .url-box {
+            background: #f8f9fa;
+            border: 2px dashed #4CAF50;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 10px;
+            font-family: monospace;
+            word-break: break-all;
+            font-size: 16px;
+            color: #2E7D32;
+            font-weight: bold;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            padding: 15px 30px;
+            text-decoration: none;
+            border-radius: 10px;
+            display: inline-block;
+            margin: 10px;
+            border: none;
+            cursor: pointer;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 1.1em;
+            transition: all 0.3s ease;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        .info-box {
+            background: #E8F5E8;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .warning {
+            background: #FFF3CD;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: left;
+            border: 1px solid #FFEAA7;
+        }
+
+        .link-type {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .network-links {
+            background: #d1ecf1;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+            border-left: 4px solid #0c5460;
+        }
+
+        /* 密码输入页面样式 */
+        .password-container {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 50px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .lock-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+            color: #667eea;
+        }
+
+        /* 信件页面样式 */
+        .letter-wrapper {
+            position: relative;
+            max-width: 800px;
+            width: 90%;
+            margin: 40px auto;
+        }
+
+        .letter-container {
+            background: linear-gradient(135deg, #fffef7, #fff9e6);
+            border: 2px solid #e8e4d9;
+            padding: 80px 60px;
+            position: relative;
+            box-shadow:
+                0 20px 60px rgba(0,0,0,0.1),
+                0 0 0 1px rgba(255,255,255,0.5) inset;
+            border-radius: 8px;
+            animation: letterAppear 1.5s ease-out;
+            z-index: 2;
+        }
+
+        @keyframes letterAppear {
+            0% {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .letter-header {
+            text-align: center;
+            margin-bottom: 40px;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 24px;
+            color: #d4af37;
+            position: relative;
+        }
+
+        .letter-header::before, .letter-header::after {
+            content: "✨";
+            margin: 0 15px;
+            font-size: 20px;
+        }
+
+        .letter-content {
+            font-family: 'Noto Serif SC', serif;
+            font-size: 22px;
+            line-height: 2.2;
+            color: #5c4b37;
+            text-align: justify;
+            white-space: pre-wrap;
+            font-weight: 400;
+            text-shadow: 0.5px 0.5px 1px rgba(0,0,0,0.1);
+            letter-spacing: 0.5px;
+            position: relative;
+            z-index: 2;
+        }
+
+        .letter-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background:
+                linear-gradient(90deg, transparent 95%, rgba(0,0,0,0.03) 100%),
+                linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px);
+            background-size: 100% 2em, 100% 2em;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .letter-seal {
+            position: absolute;
+            bottom: -25px;
+            right: -25px;
+            width: 120px;
+            height: 120px;
+            background: radial-gradient(circle at 30% 30%, #d4af37, #b8860b);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 18px;
+            transform: rotate(-15deg);
+            box-shadow:
+                0 10px 30px rgba(0,0,0,0.3),
+                0 0 0 5px rgba(255,255,255,0.3);
+            border: 3px solid rgba(255,255,255,0.8);
+            z-index: 3;
+            animation: sealRotate 3s ease-in-out infinite alternate;
+        }
+
+        @keyframes sealRotate {
+            0% { transform: rotate(-15deg) scale(1); }
+            100% { transform: rotate(-25deg) scale(1.05); }
+        }
+
+        .letter-corner {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            opacity: 0.1;
+            z-index: 1;
+        }
+
+        .corner-tl {
+            top: 0;
+            left: 0;
+            border-radius: 0 0 100% 0;
+        }
+
+        .corner-tr {
+            top: 0;
+            right: 0;
+            border-radius: 0 0 0 100%;
+        }
+
+        .corner-bl {
+            bottom: 0;
+            left: 0;
+            border-radius: 0 100% 0 0;
+        }
+
+        .corner-br {
+            bottom: 0;
+            right: 0;
+            border-radius: 100% 0 0 0;
+        }
+
+        /* 飘落的花瓣效果 */
+        .petal {
+            position: absolute;
+            top: -50px;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            border-radius: 50% 0 50% 50%;
+            opacity: 0.7;
+            animation: fall linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            to {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        /* 音乐提示样式 */
+        .music-prompt {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 25px;
+            z-index: 1000;
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 1.1em;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+
+        .music-prompt:hover {
+            transform: translateX(-50%) translateY(-2px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .letter-container {
+                padding: 40px 30px;
+                margin: 20px;
+            }
+            .letter-content {
+                font-size: 18px;
+                line-height: 2;
+            }
+            .letter-header {
+                font-size: 20px;
+                margin-bottom: 30px;
+            }
+            .letter-seal {
+                width: 80px;
+                height: 80px;
+                font-size: 14px;
+                bottom: -15px;
+                right: -15px;
+            }
+            .music-prompt {
+                font-size: 1em;
+                padding: 12px 20px;
+                top: 10px;
+            }
+        }
+
+        /* 隐藏页面 */
+        .page {
+            display: none;
+        }
+
+        .active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- 首页 -->
+    <div id="home-page" class="page active">
+        <div class="container">
+            <div class="header">
+                <div class="decoration">💌</div>
+                <h1>花式信件</h1>
+                <p>写下心意，传递真情</p>
+            </div>
+
+            <div class="network-info">
+                <strong>🌐 使用说明：</strong><br>
+                • 填写信件内容并设置密码和时间<br>
+                • 生成专属链接分享给朋友<br>
+                • 朋友在指定时间输入密码查看
+            </div>
+
+            <form id="letter-form">
+                <div class="form-group">
+                    <label for="content">📜 信件内容</label>
+                    <textarea name="content" id="content" placeholder="在此处写下您的心意..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="password">🔐 设置密码</label>
+                    <input type="password" name="password" id="password" placeholder="输入访问密码" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="access_time">⏰ 可访问时间</label>
+                    <input type="datetime-local" name="access_time" id="access_time" required>
+                    <div class="note">设置未来的某个时间点</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="custom_link">🔗 专属链接</label>
+                    <input type="text" name="custom_link" id="custom_link" placeholder="例如：my-special-letter">
+                    <div class="note">设置专属链接名称，如不填将自动生成</div>
+                </div>
+
+                <div class="form-group">
+                    <label for="music_choice">🎵 背景音乐</label>
+                    <select name="music_choice" id="music_choice">
+                        <option value="none">无背景音乐</option>
+                        <option value="yichengshanlu">毛不易 - 一程山路</option>
+                    </select>
+                    <div class="upload-info">
+                        <strong>音乐说明：</strong><br>
+                        请确保将一程山路MP3文件放在同一文件夹中，命名为：yichengshanlu.mp3
+                    </div>
+                </div>
+
+                <button type="submit">✨ 创建精美信件</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 成功页面 -->
+    <div id="success-page" class="page">
+        <div class="success-container">
+            <div class="success-icon">🎉</div>
+            <h1>信件创建成功！</h1>
+            <p style="font-size: 1.2em; color: #666; margin-bottom: 30px;">请复制以下链接分享给收件人</p>
+
+            <div class="network-links">
+                <h3 style="color: #0c5460; margin-bottom: 15px;">🌐 访问信息</h3>
+
+                <div class="link-type">🔗 专属链接：</div>
+                <div class="url-box" id="letter-link"></div>
+
+                <div class="link-type">🔐 访问密码：</div>
+                <div class="url-box" id="letter-password"></div>
+
+                <div class="link-type">⏰ 可访问时间：</div>
+                <div class="url-box" id="letter-time"></div>
+            </div>
+
+            <div class="warning">
+                <p>⚠️ <strong>重要提示：</strong></p>
+                <p>• 请保存好访问链接和密码</p>
+                <p>• 在指定时间后才能查看信件</p>
+                <p>• 背景音乐将在查看时自动播放</p>
+            </div>
+
+            <button class="btn" onclick="copyLink()">📋 复制链接信息</button>
+            <button class="btn" onclick="showPage('home-page')">📝 再写一封</button>
+            <button class="btn" onclick="viewLetter()">👀 预览信件</button>
+        </div>
+    </div>
+
+    <!-- 密码输入页面 -->
+    <div id="password-page" class="page">
+        <div class="password-container">
+            <div class="lock-icon">🔒</div>
+            <h1>请输入访问密码</h1>
+            <form id="password-form">
+                <input type="password" name="password" id="input-password" placeholder="输入密码..." required>
+                <button type="submit">✨ 查看信件</button>
+            </form>
+            <p id="password-error" style="color: #f44336; margin-top: 15px; display: none;">密码错误，请重试</p>
+        </div>
+    </div>
+
+    <!-- 信件页面 -->
+    <div id="letter-page" class="page">
+        <div class="letter-wrapper">
+            <div class="letter-container">
+                <!-- 四个角落装饰 -->
+                <div class="letter-corner corner-tl"></div>
+                <div class="letter-corner corner-tr"></div>
+                <div class="letter-corner corner-bl"></div>
+                <div class="letter-corner corner-br"></div>
+
+                <!-- 信件眉头：💌亲启 -->
+                <div class="letter-header">
+                    💌 亲 启
+                </div>
+
+                <div class="letter-content" id="letter-content"></div>
+                <div class="letter-seal">密<br>封</div>
+            </div>
+        </div>
+
+        <!-- 背景音乐 -->
+        <audio id="background-music" loop style="display: none;"></audio>
+
+        <!-- 飘落的花瓣容器 -->
+        <div id="petals-container"></div>
+    </div>
+
+    <script>
+        // 信件数据存储
+        let currentLetter = null;
+        const letters = JSON.parse(localStorage.getItem('letters') || '{}');
+
+        // 音乐资源 - 使用本地文件
+        const musicResources = {
+            'yichengshanlu': 'yichengshanlu.mp3'
+        };
+
+        // 页面切换函数
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        // 创建信件
+        document.getElementById('letter-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const formData = new FormData(this);
+            const letterId = formData.get('custom_link') || generateId();
+
+            currentLetter = {
+                id: letterId,
+                content: formData.get('content'),
+                password: formData.get('password'),
+                access_time: formData.get('access_time'),
+                music_choice: formData.get('music_choice'),
+                created_at: new Date().toISOString()
+            };
+
+            // 保存到本地存储
+            letters[letterId] = currentLetter;
+            localStorage.setItem('letters', JSON.stringify(letters));
+
+            // 显示成功页面
+            document.getElementById('letter-link').textContent = window.location.href.split('?')[0] + '?id=' + letterId;
+            document.getElementById('letter-password').textContent = currentLetter.password;
+            document.getElementById('letter-time').textContent = new Date(currentLetter.access_time).toLocaleString('zh-CN');
+
+            showPage('success-page');
+        });
+
+        // 生成随机ID
+        function generateId() {
+            return Math.random().toString(36).substr(2, 9);
+        }
+
+        // 复制链接信息
+        function copyLink() {
+            const link = document.getElementById('letter-link').textContent;
+            const password = document.getElementById('letter-password').textContent;
+            const time = document.getElementById('letter-time').textContent;
+
+            const text = `花式信件访问信息：
+链接：${link}
+密码：${password}
+可访问时间：${time}`;
+
+            navigator.clipboard.writeText(text).then(() => {
+                alert('✨ 链接信息已复制到剪贴板！');
+            });
+        }
+
+        // 预览信件
+        function viewLetter() {
+            showPage('password-page');
+        }
+
+        // 密码验证
+        document.getElementById('password-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const inputPassword = document.getElementById('input-password').value;
+            const errorElement = document.getElementById('password-error');
+
+            if (inputPassword === currentLetter.password) {
+                // 检查访问时间
+                const currentTime = new Date();
+                const accessTime = new Date(currentLetter.access_time);
+
+                if (currentTime < accessTime) {
+                    const timeRemaining = accessTime - currentTime;
+                    const hours = Math.floor(timeRemaining / (1000 * 60 * 60));
+                    const minutes = Math.floor((timeRemaining % (1000 * 60 * 60)) / (1000 * 60));
+
+                    alert(`⏰ 信件尚未到达可访问时间\n请在 ${accessTime.toLocaleString('zh-CN')} 后访问\n剩余时间: ${hours}小时 ${minutes}分钟`);
+                    return;
+                }
+
+                // 显示信件
+                document.getElementById('letter-content').textContent = currentLetter.content;
+                playBackgroundMusic(currentLetter.music_choice);
+                createPetals();
+                showPage('letter-page');
+            } else {
+                errorElement.style.display = 'block';
+                setTimeout(() => {
+                    errorElement.style.display = 'none';
+                }, 3000);
+            }
+        });
+
+        // 播放背景音乐
+        function playBackgroundMusic(musicChoice) {
+            if (musicChoice === 'none') return;
+
+            const audio = document.getElementById('background-music');
+
+            // 设置音乐源
+            const musicUrl = musicResources[musicChoice];
+            audio.src = musicUrl;
+            audio.volume = 0.4; // 设置音量
+
+            console.log('正在加载本地一程山路音乐...');
+
+            // 预加载音乐
+            audio.load();
+
+            // 创建音乐提示
+            createMusicPrompt(audio);
+        }
+
+        // 创建音乐播放提示
+        function createMusicPrompt(audio) {
+            // 移除已存在的提示
+            const existingPrompt = document.querySelector('.music-prompt');
+            if (existingPrompt) {
+                existingPrompt.remove();
+            }
+
+            const prompt = document.createElement('div');
+            prompt.className = 'music-prompt';
+            prompt.innerHTML = '🎵 点击播放 毛不易 - 一程山路';
+            prompt.onclick = function() {
+                playAudio(audio);
+                prompt.remove();
+            };
+
+            document.body.appendChild(prompt);
+
+            // 尝试自动播放
+            setTimeout(() => {
+                playAudio(audio).then(success => {
+                    if (success) {
+                        console.log('一程山路自动播放成功');
+                        prompt.remove();
+                    } else {
+                        console.log('需要用户交互才能播放音乐');
+                    }
+                });
+            }, 1500);
+
+            // 15秒后自动移除提示
+            setTimeout(() => {
+                if (prompt.parentNode) {
+                    prompt.remove();
+                }
+            }, 15000);
+        }
+
+        // 播放音频函数
+        function playAudio(audio) {
+            return new Promise((resolve) => {
+                audio.play().then(() => {
+                    console.log('一程山路开始播放');
+                    resolve(true);
+                }).catch(error => {
+                    console.log('自动播放被阻止，需要用户交互:', error);
+                    resolve(false);
+                });
+            });
+        }
+
+        // 创建飘落的花瓣
+        function createPetals() {
+            const container = document.getElementById('petals-container');
+            container.innerHTML = ''; // 清空现有花瓣
+            const petalCount = 15;
+
+            for (let i = 0; i < petalCount; i++) {
+                const petal = document.createElement('div');
+                petal.className = 'petal';
+
+                // 随机位置和大小
+                const left = Math.random() * 100;
+                const size = 10 + Math.random() * 15;
+                const duration = 5 + Math.random() * 10;
+                const delay = Math.random() * 5;
+
+                petal.style.left = left + 'vw';
+                petal.style.width = size + 'px';
+                petal.style.height = size + 'px';
+                petal.style.animationDuration = duration + 's';
+                petal.style.animationDelay = delay + 's';
+
+                // 随机颜色
+                const colors = [
+                    'linear-gradient(135deg, #ff9a9e, #fad0c4)',
+                    'linear-gradient(135deg, #a1c4fd, #c2e9fb)',
+                    'linear-gradient(135deg, #d4fc79, #96e6a1)'
+                ];
+                petal.style.background = colors[Math.floor(Math.random() * colors.length)];
+
+                container.appendChild(petal);
+            }
+        }
+
+        // URL参数处理
+        function checkUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const letterId = urlParams.get('id');
+
+            if (letterId && letters[letterId]) {
+                currentLetter = letters[letterId];
+                showPage('password-page');
+            }
+        }
+
+        // 页面加载时检查URL参数
+        window.addEventListener('load', checkUrlParams);
+
+        // 音乐加载错误处理
+        document.getElementById('background-music').addEventListener('error', function(e) {
+            console.log('一程山路音乐加载失败:', e);
+            const prompt = document.querySelector('.music-prompt');
+            if (prompt) {
+                prompt.innerHTML = '❌ 一程山路加载失败，请确保yichengshanlu.mp3文件存在';
+                prompt.style.background = 'linear-gradient(135deg, #f44336, #d32f2f)';
+            }
+        });
+
+        // 音乐加载成功
+        document.getElementById('background-music').addEventListener('canplay', function() {
+            console.log('一程山路可以播放了');
+        });
+    </script>
+</body>
+</html>
